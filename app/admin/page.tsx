@@ -38,10 +38,13 @@ const noteSchema = z.object({
 })
 
 const bookSchema = z.object({
+  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase with hyphens only"),
   title: z.string().min(1, "Title is required"),
   author: z.string().min(1, "Author is required"),
   year: z.string().optional(),
-  reflection: z.string().min(1, "Reflection is required"),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD"),
+  excerpt: z.string().min(1, "Excerpt is required"),
+  content: z.string().min(1, "Content is required"),
 })
 
 const movieSchema = z.object({
@@ -91,10 +94,13 @@ export default function AdminPage() {
   const bookForm = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
     defaultValues: {
+      slug: "",
       title: "",
       author: "",
       year: "",
-      reflection: "",
+      date: new Date().toISOString().split("T")[0],
+      excerpt: "",
+      content: "",
     },
   })
 
@@ -172,15 +178,20 @@ export default function AdminPage() {
     setLoading(endpoint)
     setSuccess(null)
     try {
-      const url = isEdit ? `/api/${endpoint}` : `/api/${endpoint}`
+      const url = `/api/${endpoint}`
       const method = isEdit ? "PUT" : "POST"
+      
+      // For books and writing, ensure slug is included in PUT requests
+      const requestData = isEdit && (endpoint === "books" || endpoint === "writing") 
+        ? { ...data, slug: editingItem?.slug }
+        : data
 
       const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(requestData),
       })
 
       if (!response.ok) {
@@ -206,7 +217,8 @@ export default function AdminPage() {
   const handleDelete = async (endpoint: string, id: string | number) => {
     setLoading("delete")
     try {
-      const response = await fetch(`/api/${endpoint}?${endpoint === "writing" ? `slug=${id}` : `id=${id}`}`, {
+      const isSlugBased = endpoint === "writing" || endpoint === "books"
+      const response = await fetch(`/api/${endpoint}?${isSlugBased ? `slug=${id}` : `id=${id}`}`, {
         method: "DELETE",
       })
 
@@ -268,17 +280,15 @@ export default function AdminPage() {
         <h3 className="text-lg font-medium">Existing Items</h3>
         <div className="space-y-2">
           {items.map((item: any) => {
-            const identifier = activeTab === "writing" ? item.slug : item.id
+            const identifier = activeTab === "writing" || activeTab === "books" ? item.slug : item.id
             const displayTitle =
-              activeTab === "writing"
+              activeTab === "writing" || activeTab === "books"
                 ? item.title
                 : activeTab === "notes"
                   ? item.content.substring(0, 50) + (item.content.length > 50 ? "..." : "")
-                  : activeTab === "books"
+                  : activeTab === "movies"
                     ? item.title
-                    : activeTab === "movies"
-                      ? item.title
-                      : item.text.substring(0, 50) + (item.text.length > 50 ? "..." : "")
+                    : item.text.substring(0, 50) + (item.text.length > 50 ? "..." : "")
 
             return (
               <div
@@ -543,10 +553,23 @@ export default function AdminPage() {
               <Form {...bookForm}>
                 <form
                   onSubmit={bookForm.handleSubmit((data) =>
-                    handleSubmit("books", { ...data, id: editingItem?.id }, bookForm, !!editingItem)
+                    handleSubmit("books", data, bookForm, !!editingItem)
                   )}
                   className="space-y-6"
                 >
+                  <FormField
+                    control={bookForm.control}
+                    name="slug"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Slug (URL-friendly, lowercase, hyphens only)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="book-title-slug" {...field} disabled={!!editingItem} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={bookForm.control}
                     name="title"
@@ -588,12 +611,38 @@ export default function AdminPage() {
                   />
                   <FormField
                     control={bookForm.control}
-                    name="reflection"
+                    name="date"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Reflection</FormLabel>
+                        <FormLabel>Date</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Your thoughts on this book..." rows={6} {...field} />
+                          <Input type="date" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={bookForm.control}
+                    name="excerpt"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Excerpt</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="A brief summary..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={bookForm.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Content (Markdown supported)</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="# Book Title\n\nYour reflection here..." rows={12} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -833,7 +882,7 @@ export default function AdminPage() {
             <AlertDialogAction
               onClick={() => {
                 if (deleteItem) {
-                  const identifier = activeTab === "writing" ? deleteItem.slug : deleteItem.id
+                  const identifier = activeTab === "writing" || activeTab === "books" ? deleteItem.slug : deleteItem.id
                   handleDelete(activeTab, identifier)
                 }
               }}

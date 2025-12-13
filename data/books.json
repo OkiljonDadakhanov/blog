@@ -1,24 +1,29 @@
 [
   {
-    "id": 1,
+    "slug": "pilgrim-at-tinker-creek",
     "title": "Pilgrim at Tinker Creek",
     "author": "Annie Dillard",
     "year": "1974",
-    "reflection": "Dillard teaches us to see. Not the quick glance of recognition, but the sustained looking that reveals hidden complexity. Her prose combines scientific precision with mystical wonder—a reminder that close observation is a form of devotion."
+    "date": "2024-01-15",
+    "excerpt": "Dillard teaches us to see. Not the quick glance of recognition, but the sustained looking that reveals hidden complexity.",
+    "content": "# Pilgrim at Tinker Creek\n\nDillard teaches us to see. Not the quick glance of recognition, but the sustained looking that reveals hidden complexity. Her prose combines scientific precision with mystical wonder—a reminder that close observation is a form of devotion.\n\nIn this book, Dillard spends a year observing the natural world around Tinker Creek in Virginia. She writes about insects, muskrats, and the changing seasons with the intensity of someone who has learned to pay attention.\n\nWhat makes this book remarkable is not just what Dillard sees, but how she sees it. She brings the same careful attention to a praying mantis eating its mate as she does to the way light falls on water. This is nature writing that refuses to separate the scientific from the spiritual, the particular from the universal.\n\nReading *Pilgrim at Tinker Creek* is like learning to see again. Dillard shows us that the world is full of wonders we've trained ourselves to ignore, and that paying attention—really paying attention—is a radical act."
   },
   {
-    "id": 2,
+    "slug": "the-rings-of-saturn",
     "title": "The Rings of Saturn",
     "author": "W.G. Sebald",
     "year": "1995",
-    "reflection": "Sebald walks through Suffolk and through time itself. The book moves like memory—one image leading to another through mysterious associations. Reading it feels like wandering through a museum where every artifact tells a story of loss and persistence."
+    "date": "2024-02-20",
+    "excerpt": "Sebald walks through Suffolk and through time itself. The book moves like memory—one image leading to another through mysterious associations.",
+    "content": "# The Rings of Saturn\n\nSebald walks through Suffolk and through time itself. The book moves like memory—one image leading to another through mysterious associations. Reading it feels like wandering through a museum where every artifact tells a story of loss and persistence.\n\nThe narrator takes a walking tour of coastal Suffolk, but the journey quickly becomes a meditation on history, memory, and the interconnectedness of all things. Sebald weaves together stories of the silk industry, the Holocaust, colonial violence, and personal memory into a seamless whole.\n\nWhat's remarkable about *The Rings of Saturn* is how Sebald makes connections that feel both inevitable and surprising. A description of herring fishing leads to a discussion of the decline of the fishing industry, which leads to thoughts about ecological collapse, which circles back to personal loss.\n\nThe book is illustrated with grainy black-and-white photographs that may or may not be related to the text. This visual element adds another layer of ambiguity and depth, making the reading experience feel like piecing together fragments of a dream.\n\nSebald's prose is hypnotic, his sentences long and winding, pulling you deeper into the narrative. This is a book that demands slow reading, the kind where you pause after each chapter to let the images and ideas settle."
   },
   {
-    "id": 3,
+    "slug": "essays-montaigne",
     "title": "Essays",
     "author": "Michel de Montaigne",
     "year": "1580",
-    "reflection": "The original blogger. Montaigne invented the personal essay by simply writing about what interested him, trusting that his particular observations might contain something universal. His radical honesty about his own contradictions remains startling."
+    "date": "2024-03-10",
+    "excerpt": "The original blogger. Montaigne invented the personal essay by simply writing about what interested him.",
+    "content": "# Essays\n\nThe original blogger. Montaigne invented the personal essay by simply writing about what interested him, trusting that his particular observations might contain something universal. His radical honesty about his own contradictions remains startling.\n\nMontaigne's essays are remarkable for their range and their intimacy. He writes about everything from friendship to cannibalism, from education to the experience of pain. What unites these diverse topics is Montaigne's commitment to examining his own mind and experience.\n\n\"What do I know?\" Montaigne asks repeatedly. This question is not a confession of ignorance but a method of inquiry. By admitting what he doesn't know, by examining his own contradictions and uncertainties, Montaigne creates a form of writing that feels both deeply personal and universally relevant.\n\nThe essays are also remarkable for their style. Montaigne writes as if thinking out loud, following digressions, circling back to earlier points, admitting when he's changed his mind. This creates a sense of conversation, as if Montaigne is thinking through these questions in real time.\n\nReading Montaigne today, it's striking how modern he feels. His concerns—about authenticity, about the relationship between the self and society, about how to live well—are still our concerns. His method—of examining the particular to understand the universal—is still a powerful way of thinking and writing."
   }
 ]
-

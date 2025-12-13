@@ -20,14 +20,11 @@ export async function POST(request: NextRequest) {
     const fileContents = await readFile(dataPath, "utf8")
     const data = JSON.parse(fileContents)
     
-    const newBook = {
-      id: Date.now(),
-      ...body
-    }
-    data.push(newBook)
+    // Add new book
+    data.push(body)
     
     await writeFile(dataPath, JSON.stringify(data, null, 2), "utf8")
-    return NextResponse.json({ success: true, data: newBook })
+    return NextResponse.json({ success: true, data: body })
   } catch (error) {
     return NextResponse.json({ error: "Failed to save data" }, { status: 500 })
   }
@@ -36,11 +33,11 @@ export async function POST(request: NextRequest) {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { id, ...updatedData } = body
+    const { slug, ...updatedData } = body
     const fileContents = await readFile(dataPath, "utf8")
     const data = JSON.parse(fileContents)
     
-    const index = data.findIndex((item: any) => item.id === id)
+    const index = data.findIndex((item: any) => item.slug === slug)
     if (index === -1) {
       return NextResponse.json({ error: "Not found" }, { status: 404 })
     }
@@ -57,16 +54,16 @@ export async function PUT(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const id = searchParams.get("id")
+    const slug = searchParams.get("slug")
     
-    if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 })
+    if (!slug) {
+      return NextResponse.json({ error: "Slug is required" }, { status: 400 })
     }
     
     const fileContents = await readFile(dataPath, "utf8")
     const data = JSON.parse(fileContents)
     
-    const filtered = data.filter((item: any) => item.id.toString() !== id)
+    const filtered = data.filter((item: any) => item.slug !== slug)
     
     await writeFile(dataPath, JSON.stringify(filtered, null, 2), "utf8")
     return NextResponse.json({ success: true })
