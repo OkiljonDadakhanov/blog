@@ -21,7 +21,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { CheckCircle2, Loader2, Edit2, Trash2 } from "lucide-react"
+import { CheckCircle2, Loader2, Edit2, Trash2, LogOut } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 const writingSchema = z.object({
@@ -67,6 +67,7 @@ export default function AdminPage() {
   const [deleteItem, setDeleteItem] = useState<any | null>(null)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [authenticated, setAuthenticated] = useState<boolean | null>(null)
 
   const writingForm = useForm<z.infer<typeof writingSchema>>({
     resolver: zodResolver(writingSchema),
@@ -116,6 +117,22 @@ export default function AdminPage() {
     },
   })
 
+  const checkAuth = async () => {
+    try {
+      const response = await fetch("/api/auth/check")
+      const data = await response.json()
+      if (data.authenticated) {
+        setAuthenticated(true)
+      } else {
+        setAuthenticated(false)
+        router.push("/admin/login")
+      }
+    } catch (error) {
+      setAuthenticated(false)
+      router.push("/admin/login")
+    }
+  }
+
   const fetchItems = async (endpoint: string) => {
     try {
       const response = await fetch(`/api/${endpoint}`)
@@ -129,16 +146,27 @@ export default function AdminPage() {
   }
 
   useEffect(() => {
-    fetchItems(activeTab)
-    setEditingItem(null)
-    setEditDialogOpen(false)
-    // Reset all forms when switching tabs
-    writingForm.reset()
-    noteForm.reset()
-    bookForm.reset()
-    movieForm.reset()
-    quoteForm.reset()
-  }, [activeTab])
+    checkAuth()
+  }, [])
+
+  useEffect(() => {
+    if (authenticated) {
+      fetchItems(activeTab)
+    }
+  }, [activeTab, authenticated])
+
+  useEffect(() => {
+    if (authenticated) {
+      setEditingItem(null)
+      setEditDialogOpen(false)
+      // Reset all forms when switching tabs
+      writingForm.reset()
+      noteForm.reset()
+      bookForm.reset()
+      movieForm.reset()
+      quoteForm.reset()
+    }
+  }, [activeTab, authenticated])
 
   const handleSubmit = async (endpoint: string, data: any, form: any, isEdit: boolean = false) => {
     setLoading(endpoint)
@@ -194,6 +222,16 @@ export default function AdminPage() {
       alert("Failed to delete. Please try again.")
     } finally {
       setLoading(null)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+      router.push("/admin/login")
+      router.refresh()
+    } catch (error) {
+      console.error("Failed to logout:", error)
     }
   }
 
@@ -278,12 +316,30 @@ export default function AdminPage() {
     )
   }
 
+  if (authenticated === null) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="size-8 animate-spin text-muted-foreground" />
+      </div>
+    )
+  }
+
+  if (!authenticated) {
+    return null
+  }
+
   return (
     <div>
-      <PageHeader
-        title="Admin"
-        description="Create, edit, and delete content for your blog."
-      />
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex-1">
+          <h1 className="text-4xl font-normal mb-4">Admin</h1>
+          <p className="text-lg text-muted-foreground mb-6">Create, edit, and delete content for your blog.</p>
+        </div>
+        <Button variant="outline" onClick={handleLogout} className="ml-4">
+          <LogOut className="size-4 mr-2" />
+          Logout
+        </Button>
+      </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList>

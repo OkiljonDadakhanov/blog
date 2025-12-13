@@ -35,12 +35,6 @@ export function Navigation() {
             </Link>
           )
         })}
-        <Link
-          href="/admin"
-          className="ml-auto text-muted-foreground hover:opacity-60 transition-opacity"
-        >
-          Admin
-        </Link>
       </div>
     </nav>
   )
