@@ -19,8 +19,8 @@ export default function About() {
         </p>
         <p className="text-lg leading-relaxed">
           If you'd like to get in touch, you can reach me at{" "}
-          <a href="mailto:hello@example.com" className="underline hover:opacity-60 transition-opacity">
-            hello@example.com
+          <a href="mailto:okiljondadakhonov@gmail.com" className="underline hover:opacity-60 transition-opacity">
+          okiljondadakhonov@gmail.com
           </a>
         </p>
       </div>
