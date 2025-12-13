@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "text": "Attention is the beginning of devotion.",
+    "source": "Mary Oliver",
+    "context": "Upstream: Selected Essays"
+  },
+  {
+    "id": 2,
+    "text": "The cure for boredom is curiosity. There is no cure for curiosity.",
+    "source": "Dorothy Parker",
+    "context": ""
+  },
+  {
+    "id": 3,
+    "text": "I write entirely to find out what I'm thinking, what I'm looking at, what I see and what it means.",
+    "source": "Joan Didion",
+    "context": "Why I Write"
+  },
+  {
+    "id": 4,
+    "text": "The purpose of a writer is to keep civilization from destroying itself.",
+    "source": "Albert Camus",
+    "context": ""
+  },
+  {
+    "id": 5,
+    "text": "We read to know we are not alone.",
+    "source": "C.S. Lewis",
+    "context": "Shadowlands"
+  }
+]
+

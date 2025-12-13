@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "title": "Stalker",
+    "director": "Andrei Tarkovsky",
+    "year": "1979",
+    "reflection": "A meditation on desire, faith, and the nature of reality. Tarkovsky's slow, deliberate camera movements create a sense of time that feels both eternal and immediate. The Zone becomes a metaphor for the inner landscape—a place where wishes come true, but at a cost we can't predict."
+  },
+  {
+    "id": 2,
+    "title": "Paterson",
+    "director": "Jim Jarmusch",
+    "year": "2016",
+    "reflection": "A week in the life of a bus driver who writes poetry. Jarmusch finds beauty in routine, in the small moments that make up a life. The film asks: what if the ordinary is extraordinary? What if the purpose of art is simply to notice?"
+  },
+  {
+    "id": 3,
+    "title": "The Tree of Life",
+    "director": "Terrence Malick",
+    "year": "2011",
+    "reflection": "Malick attempts nothing less than to capture the universe—from the Big Bang to a single family in 1950s Texas. The film moves between cosmic and intimate scales, suggesting that every moment contains eternity, that memory and time are not linear but layered."
+  }
+]
+

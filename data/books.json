@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "title": "Pilgrim at Tinker Creek",
+    "author": "Annie Dillard",
+    "year": "1974",
+    "reflection": "Dillard teaches us to see. Not the quick glance of recognition, but the sustained looking that reveals hidden complexity. Her prose combines scientific precision with mystical wonder—a reminder that close observation is a form of devotion."
+  },
+  {
+    "id": 2,
+    "title": "The Rings of Saturn",
+    "author": "W.G. Sebald",
+    "year": "1995",
+    "reflection": "Sebald walks through Suffolk and through time itself. The book moves like memory—one image leading to another through mysterious associations. Reading it feels like wandering through a museum where every artifact tells a story of loss and persistence."
+  },
+  {
+    "id": 3,
+    "title": "Essays",
+    "author": "Michel de Montaigne",
+    "year": "1580",
+    "reflection": "The original blogger. Montaigne invented the personal essay by simply writing about what interested him, trusting that his particular observations might contain something universal. His radical honesty about his own contradictions remains startling."
+  }
+]
+
