@@ -279,20 +279,22 @@ export default function AdminPage() {
       <div className="space-y-4 mb-8">
         <h3 className="text-lg font-medium">Existing Items</h3>
         <div className="space-y-2">
-          {items.map((item: any) => {
+          {items.map((item: any, index: number) => {
             const identifier = activeTab === "writing" || activeTab === "books" ? item.slug : item.id
+            // Ensure unique key by combining identifier with index
+            const uniqueKey = identifier ? `${activeTab}-${identifier}` : `${activeTab}-${index}`
             const displayTitle =
               activeTab === "writing" || activeTab === "books"
-                ? item.title
+                ? item.title || "Untitled"
                 : activeTab === "notes"
-                  ? item.content.substring(0, 50) + (item.content.length > 50 ? "..." : "")
+                  ? (item.content || "").substring(0, 50) + ((item.content?.length || 0) > 50 ? "..." : "")
                   : activeTab === "movies"
-                    ? item.title
-                    : item.text.substring(0, 50) + (item.text.length > 50 ? "..." : "")
+                    ? item.title || "Untitled"
+                    : (item.text || "").substring(0, 50) + ((item.text?.length || 0) > 50 ? "..." : "")
 
             return (
               <div
-                key={identifier}
+                key={uniqueKey}
                 className="flex items-center justify-between p-3 border border-foreground/10 rounded-md hover:bg-muted/50 transition-colors"
               >
                 <div className="flex-1 min-w-0">
@@ -825,9 +827,13 @@ export default function AdminPage() {
                     name="context"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Context (Optional)</FormLabel>
+                        <FormLabel>Context / Explanation (Optional)</FormLabel>
                         <FormControl>
-                          <Input placeholder="Book or work title" {...field} />
+                          <Textarea 
+                            placeholder="Explain the quote, provide examples, or add context..." 
+                            rows={6}
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
