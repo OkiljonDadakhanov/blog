@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { readFile } from "fs/promises"
 import { join } from "path"
+import Image from "next/image"
 
 // Make this route dynamic so new posts work immediately
 export const dynamic = 'force-dynamic'
@@ -52,13 +53,28 @@ export default async function BookPage({ params }: { params: Promise<{ slug: str
         >
           ← Back to Books
         </Link>
-        <h1 className="text-4xl font-normal mb-3">{book.title}</h1>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
-          <p>
-            {book.author}
-            {book.year && `, ${book.year}`}
-          </p>
-          {book.date && <time>{book.date}</time>}
+        <div className="flex gap-6 flex-col sm:flex-row">
+          {book.image && (
+            <div className="relative w-32 h-48 sm:w-40 sm:h-60 flex-shrink-0">
+              <Image
+                src={book.image}
+                alt={book.title}
+                fill
+                className="object-cover rounded-sm border border-foreground/10"
+                sizes="160px"
+              />
+            </div>
+          )}
+          <div className="flex-1">
+            <h1 className="text-4xl font-normal mb-3">{book.title}</h1>
+            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
+              <p>
+                {book.author}
+                {book.year && `, ${book.year}`}
+              </p>
+              {book.date && <time>{book.date}</time>}
+            </div>
+          </div>
         </div>
       </header>
       <div className="prose prose-lg max-w-none">
@@ -86,5 +102,6 @@ export default async function BookPage({ params }: { params: Promise<{ slug: str
     </article>
   )
 }
+
 
 

@@ -2,6 +2,7 @@ import { PageHeader } from "@/components/page-header"
 import Link from "next/link"
 import { readFile } from "fs/promises"
 import { join } from "path"
+import Image from "next/image"
 
 async function getBooks() {
   try {
@@ -22,21 +23,39 @@ export default async function Books() {
         title="Books"
         description="Books I return to, and longer reflections on what they mean to me."
       />
-      <div className="space-y-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
         {books.map((book: any) => (
-          <article key={book.slug} className="pb-8 border-b border-foreground/10 last:border-0">
-            <time className="text-sm text-muted-foreground block mb-2">{book.date}</time>
-            <h2 className="text-2xl font-normal mb-3">
-              <Link href={`/books/${book.slug}`} className="hover:opacity-60 transition-opacity">
+          <Link
+            key={book.slug}
+            href={`/books/${book.slug}`}
+            className="group"
+          >
+            <div className="relative aspect-[2/3] mb-3 overflow-hidden rounded-sm border border-foreground/10 hover:border-foreground/30 transition-all hover:shadow-lg">
+              {book.image ? (
+                <Image
+                  src={book.image}
+                  alt={book.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                />
+              ) : (
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <div className="text-center p-4">
+                    <p className="text-xs text-muted-foreground italic line-clamp-3">{book.title}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="text-center">
+              <h3 className="text-sm font-medium mb-1 group-hover:opacity-60 transition-opacity line-clamp-2">
                 {book.title}
-              </Link>
-            </h2>
-            <p className="text-sm text-muted-foreground mb-3">
-              {book.author}
-              {book.year && `, ${book.year}`}
-            </p>
-            {book.excerpt && <p className="text-muted-foreground leading-relaxed">{book.excerpt}</p>}
-          </article>
+              </h3>
+              <p className="text-xs text-muted-foreground line-clamp-1">
+                {book.author}
+              </p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

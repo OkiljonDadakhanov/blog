@@ -21,8 +21,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { CheckCircle2, Loader2, Edit2, Trash2, LogOut } from "lucide-react"
+import { CheckCircle2, Loader2, Edit2, Trash2, LogOut, Upload, X } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 const writingSchema = z.object({
   slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, "Slug must be lowercase with hyphens only"),
@@ -45,6 +46,7 @@ const bookSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD"),
   excerpt: z.string().min(1, "Excerpt is required"),
   content: z.string().min(1, "Content is required"),
+  image: z.string().optional(),
 })
 
 const movieSchema = z.object({
@@ -71,6 +73,7 @@ export default function AdminPage() {
   const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [authenticated, setAuthenticated] = useState<boolean | null>(null)
+  const [uploadingImage, setUploadingImage] = useState<string | null>(null)
 
   const writingForm = useForm<z.infer<typeof writingSchema>>({
     resolver: zodResolver(writingSchema),
@@ -101,6 +104,7 @@ export default function AdminPage() {
       date: new Date().toISOString().split("T")[0],
       excerpt: "",
       content: "",
+      image: "",
     },
   })
 
@@ -645,6 +649,75 @@ export default function AdminPage() {
                         <FormLabel>Content (Markdown supported)</FormLabel>
                         <FormControl>
                           <Textarea placeholder="# Book Title\n\nYour reflection here..." rows={12} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={bookForm.control}
+                    name="image"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Book Cover Image (Optional)</FormLabel>
+                        <FormControl>
+                          <div className="space-y-2">
+                            {field.value && (
+                              <div className="relative w-32 h-48 border border-foreground/10 rounded overflow-hidden">
+                                <img
+                                  src={field.value}
+                                  alt="Book cover"
+                                  className="w-full h-full object-cover"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => field.onChange("")}
+                                  className="absolute top-1 right-1 bg-background/80 rounded-full p-1 hover:bg-background"
+                                >
+                                  <X className="size-3" />
+                                </button>
+                              </div>
+                            )}
+                            <div className="flex gap-2">
+                              <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={async (e) => {
+                                  const file = e.target.files?.[0]
+                                  if (file) {
+                                    setUploadingImage("books")
+                                    const formData = new FormData()
+                                    formData.append("file", file)
+                                    try {
+                                      const response = await fetch("/api/upload", {
+                                        method: "POST",
+                                        body: formData,
+                                      })
+                                      const data = await response.json()
+                                      if (data.url) {
+                                        field.onChange(data.url)
+                                      }
+                                    } catch (error) {
+                                      alert("Failed to upload image")
+                                    } finally {
+                                      setUploadingImage(null)
+                                    }
+                                  }
+                                }}
+                                disabled={uploadingImage === "books"}
+                                className="flex-1"
+                              />
+                              {uploadingImage === "books" && (
+                                <Loader2 className="size-4 animate-spin" />
+                              )}
+                            </div>
+                            <Input
+                              type="text"
+                              placeholder="Or paste image URL"
+                              value={field.value || ""}
+                              onChange={field.onChange}
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -1,26 +1,50 @@
 import { PageHeader } from "@/components/page-header"
+import { readFile } from "fs/promises"
+import { join } from "path"
+import Image from "next/image"
 
-export default function About() {
+async function getAbout() {
+  try {
+    const filePath = join(process.cwd(), "data", "about.json")
+    const fileContents = await readFile(filePath, "utf8")
+    return JSON.parse(fileContents)
+  } catch (error) {
+    return {
+      content: "I'm a writer and reader interested in attention, slowness, and the way language shapes thought.",
+      email: "okiljondadakhonov@gmail.com",
+      image: "",
+    }
+  }
+}
+
+export default async function About() {
+  const about = await getAbout()
+  const paragraphs = about.content.split("\n\n")
+
   return (
     <div>
       <PageHeader title="About" />
       <div className="space-y-6">
-        <p className="text-lg leading-relaxed">
-          I'm a writer and reader interested in attention, slowness, and the way language shapes thought.
-        </p>
-        <p className="text-lg leading-relaxed">
-          This site is a public notebook—a place to gather essays, fragments, reading notes, and quotes that matter to me.
-          It's built with the belief that some ideas need space to breathe, away from the noise of social media and the
-          pressure of engagement metrics.
-        </p>
-        <p className="text-lg leading-relaxed">
-          Everything here is written in Markdown and compiled into static HTML. No tracking, no analytics, no comments.
-          Just words on a page.
-        </p>
+        {about.image && (
+          <div className="relative w-full max-w-md aspect-square mx-auto mb-8">
+            <Image
+              src={about.image}
+              alt="About"
+              fill
+              className="object-cover rounded-sm border border-foreground/10"
+              sizes="(max-width: 768px) 100vw, 400px"
+            />
+          </div>
+        )}
+        {paragraphs.map((paragraph: string, i: number) => (
+          <p key={i} className="text-lg leading-relaxed">
+            {paragraph}
+          </p>
+        ))}
         <p className="text-lg leading-relaxed">
           If you'd like to get in touch, you can reach me at{" "}
-          <a href="mailto:okiljondadakhonov@gmail.com" className="underline hover:opacity-60 transition-opacity">
-          okiljondadakhonov@gmail.com
+          <a href={`mailto:${about.email}`} className="underline hover:opacity-60 transition-opacity">
+            {about.email}
           </a>
         </p>
       </div>
