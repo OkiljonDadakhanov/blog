@@ -24,15 +24,16 @@ export function Navigation() {
           const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href))
           return (
             <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "hover:opacity-60 transition-opacity",
-                isActive && "font-medium opacity-100"
-              )}
-            >
-              {item.label}
-            </Link>
+            key={item.href}
+            href={item.href}
+            aria-current={isActive ? "page" : undefined}
+            className={cn(
+              "opacity-80 hover:opacity-60 transition-opacity",
+              isActive && "opacity-100 underline underline-offset-4"
+            )}
+          >
+            {item.label}
+          </Link>          
           )
         })}
       </div>
